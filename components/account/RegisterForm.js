@@ -1,29 +1,46 @@
-import { size } from 'lodash';
-import React, {useState} from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { Button, Icon, Input } from 'react-native-elements'
+import { size } from 'lodash'
+import { useNavigation } from '@react-navigation/native'
 
-import { validateEmail } from "../../utils/helpers";
+import { validateEmail } from '../../utils/helpers'
+import { registerUser } from '../../utils/actions'
+import Loading from '../Loading'
+
 
 export default function RegisterForm() {
     
+
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState(defaultFormValues())
     const [errorEmail, setErrorEmail] = useState("")
     const [errorPassword, setErrorPassword] = useState("")
     const [errorConfirm, setErrorConfirm] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const navigation = useNavigation()
 
 
     const onChange = (e, type) => {
         setFormData({...formData, [type]: e.nativeEvent.text}) //El type entre corchetes significa que es dinamico
     }
 
-    const registerUser = () =>{
-        if(!validateData()){
-            return 
+    const doRegisterUser = async() => {
+        if (!validateData()) {
+            return;
         }
 
-        console.log("Fuck yeah!!")
+        setLoading(true)
+        const result = await registerUser(formData.email, formData.password)
+        setLoading(false)
+
+        if (!result.statusResponse) {
+            setErrorEmail(result.error)
+            return
+        }
+
+        navigation.navigate("accounts")
     }
 
     const validateData = () =>{
@@ -32,7 +49,7 @@ export default function RegisterForm() {
         setErrorPassword("")
         let isValid = true 
 
-        if(!validateEmail(formData.email    )){
+        if(!validateEmail(formData.email)){
             setErrorEmail("Deber ingresar un email válido")
             isValid = false
         }
@@ -102,8 +119,9 @@ export default function RegisterForm() {
                 title="Registrar nuevo usuario"
                 containerStyle={styles.btnContainer}
                 buttonStyle={styles.btn}
-                onPress={() => registerUser()}
+                onPress={() => doRegisterUser()}
             />
+            <Loading isVisible={loading} text="Creando cuenta..."/>
         </View>
     )
 }
