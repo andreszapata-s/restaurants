@@ -1,11 +1,15 @@
 import { map } from 'lodash'
-import React from 'react'
+import React, {useState} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon, ListItem } from 'react-native-elements'
+
+import Modal from '../Modal'
 
 export default function AccountOptions({user, toastRef}) {
     const menuOptions =  generateOptions()
     
+    const [showModal, setShowModal] = useState(false)
+
     return (
         <View>
             {
@@ -13,6 +17,7 @@ export default function AccountOptions({user, toastRef}) {
                     <ListItem
                         key = {index}
                         style = {styles.menuItem}
+                        onPress= {menu.onPress}
                     >
                         <Icon
                             type="material-community"
@@ -22,7 +27,6 @@ export default function AccountOptions({user, toastRef}) {
                         <ListItem.Content>
                             <ListItem.Title>{menu.title}</ListItem.Title>
                         </ListItem.Content>
-
                         <Icon
                             type="material-community"
                             name = {menu.iconNameRight}
@@ -32,32 +36,39 @@ export default function AccountOptions({user, toastRef}) {
                     </ListItem>
                 ))
             }
+            <Modal isVisible={showModal} setVisible={setShowModal}> 
+                <Text>Hola mundo modal!</Text>
+            </Modal>
         </View>
     )
 }
 
-function generateOptions(){
+const generateOptions= () =>{
     return [
         {
             title: "Cambiar nombre y apellido",
             iconNameLeft: "account-circle",
             iconColorLeft: "#a7bfd3",
             iconNameRight: "chevron-right",
-            iconColorRight: "#a7bfd3"
+            iconColorRight: "#a7bfd3",
+            onPress: () => selectedComponent("displayName")
         },
         {
             title: "Cambiar email",
             iconNameLeft: "at",
             iconColorLeft: "#a7bfd3",
             iconNameRight: "chevron-right",
-            iconColorRight: "#a7bfd3"           
+            iconColorRight: "#a7bfd3",  
+            onPress: () => selectedComponent("email")
+       
         },
         {
             title: "Cambiar contraseña",
             iconNameLeft: "lock-reset",
             iconColorLeft: "#a7bfd3",
             iconNameRight: "chevron-right",
-            iconColorRight: "#a7bfd3"           
+            iconColorRight: "#a7bfd3",
+            onPress: () => selectedComponent("password")         
         }
     ]
 }
@@ -68,3 +79,7 @@ const styles = StyleSheet.create({
         borderBottomColor:"#a7bfd3"
     }
 })
+
+const selectedComponent = (key) => {
+    console.log(key)
+}
