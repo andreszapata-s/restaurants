@@ -1,9 +1,9 @@
-import { isEmpty } from 'lodash'
+import { isEmpty, result } from 'lodash'
 import React, {useState} from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, Icon, Input } from 'react-native-elements'
 
-import { updateProfile } from '../../utils/actions'
+import { reauthenticate, updateEmail } from '../../utils/actions'
 import { validateEmail } from '../../utils/helpers'
 
 export default function ChangeEmailForm( email, setShowModal, toastRef, setReloadUser) {
@@ -15,45 +15,54 @@ export default function ChangeEmailForm( email, setShowModal, toastRef, setReloa
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const onSubmit = async() =>{
-        if(!validateForm()){
+    const onSubmit = async() => {
+        if (!validateForm()) {
             return
         }
 
-        // setLoading(true)
-        // const result = await updateProfile({displayName: newDisplayName})
-        // setLoading(false)
+        setLoading(true)
+        const resultReauthenticate = await reauthenticate(password)
+        if (!resultReauthenticate.statusResponse) {
+            setLoading(false)
+            setErrorPassword("Contraseña incorrecta.")
+            return
+        }
 
-        // if(!result.statusResponse){
-        //     setError("Error al actualizar nomrbes y apellidos, intenta más tarde.")
-        //     return 
-        // }
-        // setReloadUser(true)
-        // toastRef.current.show("Se han actualizado nombres y apellidos",3000)
-        // setShowModal(false)
+        const resultUpdateEmail = await updateEmail(newEmail)
+        setLoading(false)
+
+        if (!resultUpdateEmail.statusResponse) {
+            setErrorEmail("No se pudes cambiar por este correo, ya está en uso por otro usuario.")
+            return
+        }
+
+        setReloadUser(true)
+        toastRef.current.show("Se ha actualizado el email.", 3000)
+        setShowModal(false)
     }
 
-    const validateForm = () =>{
+    const validateForm = () => {
         setErrorEmail(null)
         setErrorPassword(null)
         let isValid = true
 
-        if(!validateEmail(newEmail)){
-            setErrorEmail("Debes ingresar un email valido.")
-            isValid=false
+        if(!validateEmail(newEmail)) {
+            setErrorEmail("Debes ingresar un email válido.")
+            isValid = false
         }
-        if(newEmail === email){
+
+        if(newEmail === email) {
             setErrorEmail("Debes ingresar un email diferente al actual.")
-            isValid=false
+            isValid = false
         }
-        if(isEmpty(password)){
+
+        if(isEmpty(password)) {
             setErrorPassword("Debes ingresar tu contraseña.")
-            isValid=false
+            isValid = false
         }
 
         return isValid
     }
-
 return (
     <View style={styles.view}>
         <Input
