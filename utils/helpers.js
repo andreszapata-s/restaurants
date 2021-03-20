@@ -26,7 +26,7 @@ export const loadImageFromGallery = async(array) => {
     return response
 }
 
-export const fileToBlob = async(path) =>{
+export const fileToBlob = async(path) => {
     const file = await fetch(path)
     const blob = await file.blob()
     return blob
