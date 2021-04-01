@@ -2,6 +2,7 @@ import { size } from 'lodash'
 import React from 'react'
 import { ActivityIndicator, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Image } from 'react-native-elements'
+import { formatPhone } from '../../utils/helpers'
 
 export default function ListRestaurants({ restaurants, navigation, handleLoadMore }) {
     return (
@@ -19,12 +20,16 @@ export default function ListRestaurants({ restaurants, navigation, handleLoadMor
     )
 }
 
-function Restaurant({ restaurant, navigation }) {
+function Restaurant({ restaurant, navigation, handleLoadMore }) {
     const { id, images, name, address, description, phone, callingCode } = restaurant.item
     const imageRestaurant = images[0]
 
+    const goRestaurant = () =>{
+        navigation.navigate("restaurant", { id, name })
+    }
+
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={goRestaurant}>
             <View style={styles.viewRestaurant}>
                 <View style={styles.viewRestaurantImage}>
                     <Image
@@ -37,7 +42,7 @@ function Restaurant({ restaurant, navigation }) {
                 <View>
                     <Text style={styles.restaurantTitle}>{name}</Text>
                     <Text style={styles.restaurantInformation}>{address}</Text>
-                    <Text style={styles.restaurantInformation}> +{callingCode}-{phone}</Text>
+                    <Text style={styles.restaurantInformation}>{formatPhone(callingCode, phone)}</Text>
                     <Text style={styles.restaurantDescription}>
                         {
                             size(description) > 0
