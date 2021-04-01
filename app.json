@@ -17,12 +17,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.andres.restaurants"
     },
     "android": {
+      "package":"com.andres.restaurants",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA-4u3ZpaENwLF-yLjoo9ap83WKtBt2eqE"
+        }
       },
       "permissions": [
         "CAMERA_ROLL",

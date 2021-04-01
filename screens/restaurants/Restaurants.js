@@ -1,12 +1,22 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useCallback} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { useFocusEffect } from '@react-navigation/native'
 import firebase from 'firebase/app'
 
-import Loading from "../../components/Loading";
+import Loading from "../../components/Loading"
+import { getRestaurants } from '../../utils/actions'
+import { size } from 'lodash'
+import ListRestaurants from '../../components/restaurants/ListRestaurants'
 
 export default function Restaurants( {navigation}) {
     const [user, setUser] = useState(null)
+    const [startRestaurant, setStartRestaurant] = useState(null)
+    const [restaurants, setRestaurants] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    const limitRestaurants = 7 
+    console.log("restaurants",restaurants)
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged((userInfo) => {
@@ -14,13 +24,38 @@ export default function Restaurants( {navigation}) {
         })
     }, [])
 
+
+    useFocusEffect(
+        useCallback(async() =>{ 
+            setLoading(true)
+            const response = await getRestaurants(limitRestaurants)
+            if(response.statusResponse){
+                setStartRestaurant(response.startRestaurant)
+                setRestaurants(response.restaurants)
+            }
+            setLoading(false)
+        },[])
+    )
+    
+
     if(user === null){
         return <Loading isVisible={true} text="Cargando..."/>
     }
 
     return (
         <View style={styles.viewBody}>
-            <Text>Restaurants...</Text>
+            {
+                size(restaurants) > 0 ?(
+                    <ListRestaurants 
+                        restaurants={restaurants}
+                        navigation={navigation}
+                    />
+                ):(
+                    <View style={styles.notFoundView}>
+                        <Text style={styles.notFoundText}>No hay restaurantes registrados.</Text>
+                    </View>
+                )
+            }
             {
                 user && (
                     <Icon
@@ -33,6 +68,7 @@ export default function Restaurants( {navigation}) {
                     />
                 )
             }
+            <Loading isVisible={loading} text="Cargando restaurantes..."/>
         </View>
     )
 }
@@ -48,5 +84,14 @@ const styles = StyleSheet.create({
         shadowColor:"black",
         shadowOffset:{width:2, height:2},
         shadowOpacity:0.5
+    },
+    notFoundView:{
+        flex:1,
+        justifyContent: "center",
+        alignItems:"center"
+    },
+    notFoundText:{
+        fontSize:18,
+        fontWeight:"bold"
     }
 })
