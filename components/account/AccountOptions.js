@@ -86,7 +86,6 @@ export default function AccountOptions({user, toastRef, setReloadUser}) {
                     <ListItem
                         key = {index}
                         style = {styles.menuItem}
-                        onPress= {menu.onPress}
                     >
                         <Icon
                             type="material-community"
