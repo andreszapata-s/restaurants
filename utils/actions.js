@@ -33,7 +33,7 @@ export const registerUser = async(email, password) => {
     return result
 }
 
-export const loginWithEmailAndPassword = async(email, password) => {
+export const loginWithEmail = async(email, password) => {
     const result = { statusResponse: true, error: null}
     try {
         await firebase.auth().signInWithEmailAndPassword(email, password)
@@ -265,6 +265,28 @@ export const getFavorites = async() => {
     }
     return result     
 }
+
+
+export const getTopRestaurants = async(limit) => {
+    const result = { statusResponse: true, error: null, restaurants: [] }
+    try {
+        const response = await db
+            .collection("restaurants")
+            .orderBy("rating", "desc")
+            .limit(limit)
+            .get()
+        response.forEach((doc) => {
+            const restaurant = doc.data()
+            restaurant.id = doc.id
+            result.restaurants.push(restaurant)
+        })
+    } catch (error) {
+        result.statusResponse = false
+        result.error = error
+    }
+    return result     
+}
+
 
 
 
