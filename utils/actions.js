@@ -1,10 +1,12 @@
 import { firebaseApp } from './firebase'
+import { FireSQL } from 'firesql'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
 import { fileToBlob } from './helpers'
 import { map } from 'lodash'
 
 const db = firebase.firestore(firebaseApp)
+const fireSQL = new FireSQL(firebase.firestore(), { includeId: "id" })
 
 export const isUserLogged = () => {
     let isLogged = false
@@ -281,6 +283,16 @@ export const getTopRestaurants = async(limit) => {
             result.restaurants.push(restaurant)
         })
     } catch (error) {
+        result.statusResponse = false
+        result.error = error
+    }
+    return result     
+}
+
+export const searchRestaurants = async(criteria) => {
+    const result = { statusResponse: true, error: null, restaurants: [] }
+    try {
+        result.restaurants = await fireSQL.query(`SELECT * FROM restaurants WHERE name LIKE '${criteria}%'`)    } catch (error) {
         result.statusResponse = false
         result.error = error
     }
