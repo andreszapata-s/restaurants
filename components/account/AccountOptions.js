@@ -1,22 +1,21 @@
-import { map } from 'lodash'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Icon, ListItem } from 'react-native-elements'
+import { ListItem, Icon } from 'react-native-elements'
+import { map } from 'lodash';
 
-import Modal from '../Modal'
-import ChangeDisplayNameForm from './ChangeDisplayNameForm'
-import ChangeEmailForm from './ChangeEmailForm'
-import ChangePasswordForm from './ChangePasswordForm'
+import Modal from '../Modal';
+import ChangeDisplayNameForm from './ChangeDisplayNameForm';
+import ChangeEmailForm from './ChangeEmailForm';
+import ChangePasswordForm from './ChangePasswordForm';
 
-export default function AccountOptions({user, toastRef, setReloadUser}) {
-
+export default function AccountOptions({ user, toastRef, setRelodUser }) {
     const [showModal, setShowModal] = useState(false)
     const [renderComponent, setRenderComponent] = useState(null)
 
-    const generateOptions= () =>{
+    const generateOptions = () => {
         return [
             {
-                title: "Cambiar nombre y apellido",
+                title : "Cambiar Nombres y Apellidos",
                 iconNameLeft: "account-circle",
                 iconColorLeft: "#a7bfd3",
                 iconNameRight: "chevron-right",
@@ -24,22 +23,21 @@ export default function AccountOptions({user, toastRef, setReloadUser}) {
                 onPress: () => selectedComponent("displayName")
             },
             {
-                title: "Cambiar email",
+                title : "Cambiar Email",
                 iconNameLeft: "at",
                 iconColorLeft: "#a7bfd3",
                 iconNameRight: "chevron-right",
-                iconColorRight: "#a7bfd3",  
+                iconColorRight: "#a7bfd3",
                 onPress: () => selectedComponent("email")
-           
             },
             {
-                title: "Cambiar contraseña",
+                title : "Cambiar Contraseña",
                 iconNameLeft: "lock-reset",
                 iconColorLeft: "#a7bfd3",
                 iconNameRight: "chevron-right",
                 iconColorRight: "#a7bfd3",
-                onPress: () => selectedComponent("password")         
-            }
+                onPress: () => selectedComponent("password")
+            },
         ]
     }
 
@@ -51,7 +49,7 @@ export default function AccountOptions({user, toastRef, setReloadUser}) {
                         displayName={user.displayName}
                         setShowModal={setShowModal}
                         toastRef={toastRef}
-                        setReloadUser={setReloadUser}
+                        setRelodUser={setRelodUser}
                     />
                 )
                 break;
@@ -61,9 +59,9 @@ export default function AccountOptions({user, toastRef, setReloadUser}) {
                         email={user.email}
                         setShowModal={setShowModal}
                         toastRef={toastRef}
-                        setReloadUser={setReloadUser}
+                        setRelodUser={setRelodUser}
                     />
-                    )
+                )
                 break;
             case "password":
                 setRenderComponent(
@@ -76,31 +74,31 @@ export default function AccountOptions({user, toastRef, setReloadUser}) {
         }
         setShowModal(true)
     }
-    
-    const menuOptions =  generateOptions()
+
+    const menuOptions = generateOptions();
 
     return (
         <View>
             {
                 map(menuOptions, (menu, index) => (
                     <ListItem
-                        key = {index}
-                        style = {styles.menuItem}
+                        key={index}
+                        style={styles.menuItem}
+                        onPress={menu.onPress}
                     >
                         <Icon
                             type="material-community"
-                            name = {menu.iconNameLeft}
-                            color = {menu.iconColorLeft}
+                            name={menu.iconNameLeft}
+                            color={menu.iconColorLeft}
                         />
                         <ListItem.Content>
                             <ListItem.Title>{menu.title}</ListItem.Title>
                         </ListItem.Content>
                         <Icon
                             type="material-community"
-                            name = {menu.iconNameRight}
-                            color = {menu.iconColorRight}
+                            name={menu.iconNameRight}
+                            color={menu.iconColorRight}
                         />
-                        
                     </ListItem>
                 ))
             }
@@ -108,18 +106,15 @@ export default function AccountOptions({user, toastRef, setReloadUser}) {
                 {
                     renderComponent
                 }
-            </Modal> 
+            </Modal>
         </View>
     )
 }
 
-
-
 const styles = StyleSheet.create({
     menuItem: {
-        borderBottomWidth:1,
-        borderBottomColor:"#a7bfd3"
+        borderBottomWidth: 1,
+        borderBottomColor: "#a7bfd3"
     }
 })
-
 

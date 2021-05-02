@@ -1,48 +1,49 @@
-import { isEmpty } from 'lodash'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Button, Input } from 'react-native-elements'
+import { Button,Input } from 'react-native-elements'
+import { isEmpty } from 'lodash'
 
 import { updateProfile } from '../../utils/actions'
 
-export default function ChangeDisplayNameForm({displayName, setShowModal, toastRef, setReloadUser}) {
+export default function ChangeDisplayNameForm({ displayName, setShowModal, toastRef, setRelodUser }) {
+    const [newDisplayName, setNewDisplayName] = useState(null)
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
 
-        const [newDisplayName, setNewDisplayName] = useState(null)
-        const [error, setError] = useState(null)
-        const [loading, setLoading] = useState(false)
-
-        const onSubmit = async() =>{
-            if(!validateForm()){
-                return
-            }
-
-            setLoading(true)
-            const result = await updateProfile({displayName: newDisplayName})
-            setLoading(false)
-
-            if(!result.statusResponse){
-                setError("Error al actualizar nomrbes y apellidos, intenta más tarde.")
-                return 
-            }
-            setReloadUser(true)
-            toastRef.current.show("Se han actualizado nombres y apellidos",3000)
-            setShowModal(false)
+    const onSubmit = async() => {
+        if (!validateForm()) {
+            return
         }
 
-        const validateForm = () =>{
-            setError(null)
+        setLoading(true)
+        const result = await updateProfile({ displayName: newDisplayName })
+        setLoading(false)
 
-            if(isEmpty(newDisplayName)){
-                setError("Debes ingresar nombres y apellidos.")
-                return false
-            }
-            if(newDisplayName === displayName){
-                setError("Debes ingresar nombres y apellidos diferentes.")
-                return false
-            }
-
-            return true
+        if (!result.statusResponse) {
+            setError("Eror al actualizar nombres y apellidos, intenta más tarde.")
+            return
         }
+
+        setRelodUser(true)
+        toastRef.current.show("Se han actualizado nombres y apellidos.", 3000)
+        setShowModal(false)
+    }
+
+    const validateForm = () => {
+        setError(null)
+
+        if(isEmpty(newDisplayName)) {
+            setError("Debes ingresar nombres y apellidos.")
+            return false
+        }
+
+        if(newDisplayName === displayName) {
+            setError("Debes ingresar nombres y apellidos diferentes a los actuales.")
+            return false
+        }
+
+        return true
+    }
 
     return (
         <View style={styles.view}>
@@ -59,7 +60,7 @@ export default function ChangeDisplayNameForm({displayName, setShowModal, toastR
                 }}
             />
             <Button
-                title="Cambiar nombres y apellidos"
+                title="Cambiar Nombres y Apellidos"
                 containerStyle={styles.btnContainer}
                 buttonStyle={styles.btn}
                 onPress={onSubmit}
@@ -70,17 +71,17 @@ export default function ChangeDisplayNameForm({displayName, setShowModal, toastR
 }
 
 const styles = StyleSheet.create({
-    view:{
-        alignItems:"center",
+    view: {
+        alignItems: "center",
         paddingVertical: 10
     },
-    input:{
-        marginBottom:10
+    input: {
+        marginBottom: 10
     },
-    btnContainer:{
-        width:"95%"
+    btnContainer: {
+        width: "95%"
     },
-    btn:{
+    btn: {
         backgroundColor: "#442484"
     }
 })

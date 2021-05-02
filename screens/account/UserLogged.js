@@ -12,32 +12,33 @@ import AccountOptions from '../../components/account/AccountOptions'
 export default function UserLogged() {
     const toastRef = useRef()
     const navigation = useNavigation()
-    
+
     const [loading, setLoading] = useState(false)
     const [loadingText, setLoadingText] = useState("")
     const [user, setUser] = useState(null)
-    const [reloadUser, setReloadUser] = useState(false)
+    const [relodUser, setRelodUser] = useState(false)
 
     useEffect(() => {
         setUser(getCurrentUser())
-        setReloadUser(false)
-    }, [reloadUser])
+        setRelodUser(false)
+    }, [relodUser])
 
     return (
-
         <View style={styles.container}>
             {
                 user && (
-                <View>
-                    <InfoUser 
-                     user={user}
-                     setLoading={setLoading} setLoadingText={setLoadingText}/>
-                    <AccountOptions
-                      user={user}
-                      toastRef={toastRef}
-                      setReloadUser={setReloadUser}
-                    />
-                </View>
+                    <View>
+                        <InfoUser 
+                            user={user} 
+                            setLoading={setLoading} 
+                            setLoadingText={setLoadingText}
+                        />
+                        <AccountOptions
+                            user={user} 
+                            toastRef={toastRef}
+                            setRelodUser={setRelodUser}
+                        />
+                    </View>
                 )
             }
             <Button
@@ -50,7 +51,7 @@ export default function UserLogged() {
                 }}
             />
             <Toast ref={toastRef} position="center" opacity={0.9}/>
-            <Loading isVisible={loading} text={loadingText}/>            
+            <Loading isVisible={loading} text={loadingText}/>
         </View>
     )
 }
