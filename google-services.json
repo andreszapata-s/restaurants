@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1010163798503",
+    "project_id": "restaurants-989f0",
+    "storage_bucket": "restaurants-989f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010163798503:android:3a83025f4c9b802c59ad42",
+        "android_client_info": {
+          "package_name": "com.andres.restaurants"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010163798503-lvt7r2k1tfj7l1b2ihmfds9v48oukn0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andres.restaurants",
+            "certificate_hash": "74dc4ba99be6473ed0a3321e996a9e535860fda1"
+          }
+        },
+        {
+          "client_id": "1010163798503-4o7158nkpqptcs60tj69gq86svem06de.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-4u3ZpaENwLF-yLjoo9ap83WKtBt2eqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010163798503-4o7158nkpqptcs60tj69gq86svem06de.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1010163798503-t6kogkf21g9il354gf7vu6iqm7u2ek8u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.andres.restaurants"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
